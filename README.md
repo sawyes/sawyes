@@ -6,7 +6,7 @@
 composer require sawyes/sawyes
 ```
 
-## usage
+## Basic Usage
 
 
 ```
