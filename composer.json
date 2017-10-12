@@ -12,9 +12,9 @@
   ],
   "require": {
     "php": ">=5.4.0",
-    "laravel/framework": "5.5.*",
-    "monolog/monolog": "~1.11",
-    "symfony/console": "~3.2"
+    "laravel/framework": "5.*",
+    "monolog/monolog": "*",
+    "symfony/console": "*"
   },
   "replace": {
         "illuminate/auth": "self.version",
