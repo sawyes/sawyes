@@ -47,7 +47,7 @@
         "illuminate/validation": "self.version",
         "illuminate/view": "self.version",
         "tightenco/collect": "self.version"
-    }
+    },
   "autoload": {
     "psr-4": {
       "Sawyes\\": "src/"
