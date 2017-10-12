@@ -1,0 +1,65 @@
+{
+  "name": "sawyes",
+  "description": "laravel project to log every daily",
+  "keywords": ["laravel log daily"],
+  "homepage": "https://github.com/sawyes/log-helper",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Sawyes",
+      "email": "7061384@126.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.4.0",
+    "laravel/framework": "5.5.*",
+    "monolog/monolog": "~1.11",
+    "symfony/console": "~3.2"
+  },
+  "replace": {
+        "illuminate/auth": "self.version",
+        "illuminate/broadcasting": "self.version",
+        "illuminate/bus": "self.version",
+        "illuminate/cache": "self.version",
+        "illuminate/config": "self.version",
+        "illuminate/console": "self.version",
+        "illuminate/container": "self.version",
+        "illuminate/contracts": "self.version",
+        "illuminate/cookie": "self.version",
+        "illuminate/database": "self.version",
+        "illuminate/encryption": "self.version",
+        "illuminate/events": "self.version",
+        "illuminate/exception": "self.version",
+        "illuminate/filesystem": "self.version",
+        "illuminate/hashing": "self.version",
+        "illuminate/http": "self.version",
+        "illuminate/log": "self.version",
+        "illuminate/mail": "self.version",
+        "illuminate/notifications": "self.version",
+        "illuminate/pagination": "self.version",
+        "illuminate/pipeline": "self.version",
+        "illuminate/queue": "self.version",
+        "illuminate/redis": "self.version",
+        "illuminate/routing": "self.version",
+        "illuminate/session": "self.version",
+        "illuminate/support": "self.version",
+        "illuminate/translation": "self.version",
+        "illuminate/validation": "self.version",
+        "illuminate/view": "self.version",
+        "tightenco/collect": "self.version"
+    },
+  "require-dev": {
+
+  },
+  "autoload": {
+    "psr-4": {
+      "Sawyes\\": "src/"
+    }
+  },
+  "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+  },
+  "minimum-stability": "dev"
+}
