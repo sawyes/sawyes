@@ -20,5 +20,6 @@
     "psr-4": {
       "Sawyes\\": "src/"
     }
-  }
+  },
+  "minimum-stability": "dev"
 }
