@@ -10,11 +10,16 @@ composer require sawyes/sawyes
 
 
 ```
+// write('message', array(), 'log-file-name');
 LoggerHelper::write('Login info:', ['username'=>'Admin', 'password'], 'logger');
 ```
 
 then you can find log file
 
-storage_path/log/logger-2017-10-12.log
+path/to/project/storage/log/logger-2017-10-12.log
+
+```
+[2017-10-12 14:22:54] local.DEBUG: file: web.php line: 16 message: Login info: {"username":"Admin","0":"password"}  
+```
 
 happy hacking!
