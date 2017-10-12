@@ -3,7 +3,7 @@
  * @Author: Sawyes
  * @Date:   2017-10-12 14:13:42
  * @Last Modified by:   anchen
- * @Last Modified time: 2017-10-12 17:09:04
+ * @Last Modified time: 2017-10-12 17:58:42
  * @link( https://github.com/sawyes/log-helper, link)
  */
 
@@ -150,7 +150,7 @@ class LoggerHelper
         if (function_exists('app') && app()->bound('path.storage')) {
             return storage_path() . DIRECTORY_SEPARATOR . 'logs' . DIRECTORY_SEPARATOR . $file_name . '.log';
         }
-        dd(get_class());
+        
         return __DIR__ . DIRECTORY_SEPARATOR . $file_name . '.log';
     }
 }
