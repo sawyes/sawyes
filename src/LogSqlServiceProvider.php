@@ -61,7 +61,7 @@ class LogSqlServiceProvider extends LaravelServiceProvider
 
         $this->publishes([
             $configPath => config_path('sawyes.php')
-        ], 'sawyes');
+        ], 'Sawyes\LogSqlServiceProvider');
     }
 
     private function handleTranslations() 
