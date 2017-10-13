@@ -57,10 +57,11 @@ class ServiceProvider extends LaravelServiceProvider
 
     private function handleConfigs() 
     {
-
         $configPath = __DIR__ . '/../config/sawyes.php';
 
-        $this->publishes([$configPath => config_path('sawyes.php')]);
+        $this->publishes([
+            $configPath => config_path('sawyes.php')
+        ], 'sawyes');
     }
 
     private function handleTranslations() 
@@ -94,13 +95,10 @@ class ServiceProvider extends LaravelServiceProvider
      */
     private function handleLogSQL()
     {
-        if ($this->booted) {
-            return;
-        }
 
-        if ($this->shouldCollect('debug_log') && isset($this->app['db']) {
+        if ($this->shouldCollect('debug_log') && isset($this->app['db'])) {
             $db = $this->app['db'];
-            $db->listen(function ($sql, $bindings = null, $time = null, $connectionName = null) {
+            $db->listen(function ($sql) {
                 foreach ($sql->bindings as $i => $binding) {
                     if ($binding instanceof \DateTime) {
                         $sql->bindings[$i] = $binding->format('\'Y-m-d H:i:s\'');
@@ -116,15 +114,15 @@ class ServiceProvider extends LaravelServiceProvider
 
                 $query = vsprintf($query, $sql->bindings);
 
-                $time  = (int) $sql->$time / 1000;
-                $endTime = microtime(true);
-                $startTime = $endTime - $time;
+                $time  = (int) $sql->time / 1000;
 
-                $connection =$sql->connection;
 
-                $line  = vsprintf("connection: %s \t\t time: %s s\r\n", $connection->getDatabaseName(), $time);
+                $executeInfo  = vsprintf("connection: %s \t\t time: %s s\r\n", [
+                    $sql->connectionName,
+                    $time
+                ]);
 
-                \Sawyes\Log\LoggerHelper::write("\r\n" . $query, [], 'sql');
+                \Sawyes\Log\LoggerHelper::write($executeInfo . $query, [], 'sql');
             });
         }
     }
@@ -136,4 +134,5 @@ class ServiceProvider extends LaravelServiceProvider
         }
         return false;
     }
+
 }
