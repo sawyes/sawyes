@@ -9,6 +9,7 @@ composer require sawyes/sawyes
 ## Basic Usage
 
 
+#### LoggerHelper
 ```
 // write('message', array(), 'log-file-name');
 LoggerHelper::write('Login info:', ['username'=>'Admin', 'password'], 'logger');

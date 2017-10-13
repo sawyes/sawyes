@@ -22,11 +22,14 @@ class ServiceProvider extends LaravelServiceProvider
     public function boot() 
     {
 
-        // $this->handleConfigs();
+        $this->handleConfigs();
         // $this->handleMigrations();
         // $this->handleViews();
         // $this->handleTranslations();
         // $this->handleRoutes();
+        // 
+        
+        $this->handleLogSQL();
     }
 
     /**
@@ -55,9 +58,9 @@ class ServiceProvider extends LaravelServiceProvider
     private function handleConfigs() 
     {
 
-        $configPath = __DIR__ . '/../config/loghelper.php';
+        $configPath = __DIR__ . '/../config/sawyes.php';
 
-        $this->publishes([$configPath => config_path('loghelper.php')]);
+        $this->publishes([$configPath => config_path('sawyes.php')]);
     }
 
     private function handleTranslations() 
@@ -83,5 +86,54 @@ class ServiceProvider extends LaravelServiceProvider
     {
 
         include __DIR__.'/../routes.php';
+    }
+
+    /**
+     * Logging sql in log file
+     * @return [type] [description]
+     */
+    private function handleLogSQL()
+    {
+        if ($this->booted) {
+            return;
+        }
+
+        if ($this->shouldCollect('debug_log') && isset($this->app['db']) {
+            $db = $this->app['db'];
+            $db->listen(function ($sql, $bindings = null, $time = null, $connectionName = null) {
+                foreach ($sql->bindings as $i => $binding) {
+                    if ($binding instanceof \DateTime) {
+                        $sql->bindings[$i] = $binding->format('\'Y-m-d H:i:s\'');
+                    } else {
+                        if (is_string($binding)) {
+                            $sql->bindings[$i] = "'$binding'";
+                        }
+                    }
+                }
+
+                // Insert bindings into query
+                $query = str_replace(array('%', '?'), array('%%', '%s'), $sql->sql);
+
+                $query = vsprintf($query, $sql->bindings);
+
+                $time  = (int) $sql->$time / 1000;
+                $endTime = microtime(true);
+                $startTime = $endTime - $time;
+
+                $connection =$sql->connection;
+
+                $line  = vsprintf("connection: %s \t\t time: %s s\r\n", $connection->getDatabaseName(), $time);
+
+                \Sawyes\Log\LoggerHelper::write("\r\n" . $query, [], 'sql');
+            });
+        }
+    }
+
+    private function shouldCollect($name, $default = false)
+    {
+        if(app()->bound('config')) {
+            return $this->app['config']->get('sawyes.' . $name, $default);
+        }
+        return false;
     }
 }
