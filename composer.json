@@ -14,7 +14,8 @@
     "php": ">=5.4.0",
     "laravel/framework": "5.*",
     "monolog/monolog": "*",
-    "symfony/console": "*"
+    "symfony/console": "*",
+    "hmazter/laravel-schedule-list": "*"
   },
   "autoload": {
     "psr-4": {

@@ -47,7 +47,7 @@ add provider services in config/app.php
 
 publishes config to enable log
 ```
- php artisan vendor:publish --tag=sawyes
+ php artisan vendor:publish --tag=Sawyes\LogSqlServiceProvider
 ```
 
 now your can find log file in your storage path!
