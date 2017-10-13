@@ -4,7 +4,7 @@ namespace Sawyes;
 
 use Illuminate\Support\ServiceProvider as LaravelServiceProvider;
 
-class ServiceProvider extends LaravelServiceProvider 
+class LogSqlServiceProvider extends LaravelServiceProvider 
 {
 
     /**
