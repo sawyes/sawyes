@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "a5f491cd6900e701f41fd8f617a65455",
-    "content-hash": "c3ef54699214013b7b4b88b966a8d1d5",
+    "hash": "cc6c754aa746251b8bb918c64708d9f4",
+    "content-hash": "99fbc8599cae77c2c06d4dec1f6126f4",
     "packages": [
         {
             "name": "doctrine/inflector",
@@ -228,17 +228,63 @@
             "time": "2017-05-14 14:47:48"
         },
         {
-            "name": "laravel/framework",
-            "version": "5.5.x-dev",
+            "name": "hmazter/laravel-schedule-list",
+            "version": "v0.1.3",
             "source": {
                 "type": "git",
-                "url": "https://github.com/laravel/framework.git",
-                "reference": "8427c704124c2b96bfae4312a68ff1dfcf135f61"
+                "url": "https://github.com/hmazter/laravel-schedule-list.git",
+                "reference": "cfe69de67920e951fb004607753f8e85ea699c20"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/laravel/framework/8427c704124c2b96bfae4312a68ff1dfcf135f61.zip",
-                "reference": "8427c704124c2b96bfae4312a68ff1dfcf135f61",
+                "url": "https://files.phpcomposer.com/files/hmazter/laravel-schedule-list/cfe69de67920e951fb004607753f8e85ea699c20.zip",
+                "reference": "cfe69de67920e951fb004607753f8e85ea699c20",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/console": "^5.0",
+                "illuminate/support": "^5.0",
+                "php": ">=5.5.9"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^5.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Hmazter\\LaravelScheduleList\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kristoffer Högberg",
+                    "email": "krihog@gmail.com"
+                }
+            ],
+            "description": "Laravel package to add command to list all scheduled artisan commands",
+            "keywords": [
+                "artisan",
+                "console",
+                "laravel5"
+            ],
+            "time": "2015-12-30 10:19:25"
+        },
+        {
+            "name": "laravel/framework",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel/framework.git",
+                "reference": "9ffb657afef54d71291f1a6cd48fb260adcdf628"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://files.phpcomposer.com/files/laravel/framework/9ffb657afef54d71291f1a6cd48fb260adcdf628.zip",
+                "reference": "9ffb657afef54d71291f1a6cd48fb260adcdf628",
                 "shasum": ""
             },
             "require": {
@@ -329,7 +375,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "5.5-dev"
+                    "dev-master": "5.6-dev"
                 }
             },
             "autoload": {
@@ -357,7 +403,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2017-10-11 19:44:07"
+            "time": "2017-10-10 20:10:17"
         },
         {
             "name": "league/flysystem",
