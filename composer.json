@@ -28,7 +28,8 @@
   "extra": {
     "laravel": {
       "providers": [
-        "Sawyes\\LogSqlServiceProvider"
+        "Sawyes\\LogSqlServiceProvider",
+        "Sawyes\\SchedulelistServicePROVIDER"
       ]
     }
   }
