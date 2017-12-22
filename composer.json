@@ -14,7 +14,7 @@
     "php": ">=5.4.0",
     "laravel/framework": "5.*",
     "monolog/monolog": "*",
-    "symfony/console": "*",
+    "symfony/console": "*"
   },
   "autoload": {
     "psr-4": {
