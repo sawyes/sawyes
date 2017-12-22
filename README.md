@@ -33,9 +33,10 @@ then you can find log file
 ```
 
 
-#### 2.Log SQL in file
+#### 2.Log SQL Service Provider
 
-add provider services in config/app.php 
+* add provider services in config/app.php 
+> laravel >=5.5 skip this step .
 
 ```
 'providers' => [
@@ -45,10 +46,21 @@ add provider services in config/app.php
     ]
 ```
 
-publishes config to enable log
+* publishes config to enable log
+
+<= 5.4
 ```
  php artisan vendor:publish --tag=Sawyes\LogSqlServiceProvider
 ```
+>5.4
+check package php artisan package:discover , then run below command choice Sawyes\LogSqlServiceProvider
+```
+php artisan vendor:publish
+```
+
+* configure env file
+write APP_DEBUG_LOG=true in your .env file
+
 
 now your can find log file in your storage path!
 
