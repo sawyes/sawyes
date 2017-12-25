@@ -85,6 +85,7 @@ class ScheduleDetail extends Command
                 'without_overlapping' => $item['without_overlapping'],
                 'expires_at'          => $item['expires_at'],
                 'mutex_name'          => $item['mutex_name'],
+                'timezone'            => $item['timezone'],
                 'jobs_total'          => count($item['schedule_date']),
                 'run_date'            => $this->startDay()->toDateString(),
                 'created_at'          => Carbon::now()->toDateTimeString(),
@@ -115,6 +116,7 @@ class ScheduleDetail extends Command
             'short_command' ,
             'expression' ,
             'mutex_name' ,
+            'timezone' ,
             'schedule_date' ,
         ];
 
@@ -144,6 +146,7 @@ class ScheduleDetail extends Command
             'mutex_name' ,
             'without_overlapping' ,
             'expires_at',
+            'timezone',
             'next_time' ,
         ];
 
@@ -175,12 +178,12 @@ class ScheduleDetail extends Command
          $scheduleData = [];
 
          collect($events)->each(function(Event $event) use(&$scheduleData) {
-
+            
             $data = [
                 'full_command' => $event->buildCommand(),
                 'short_command' => $this->getShortCommand($event->buildCommand()),
                 'expression' => $event->expression,
-                // 'timezone' => $event->timezone,
+                'timezone' => $event->timezone ? $event->timezone: date_default_timezone_get(),
                 'mutex_name' => $event->mutexName(),
                 'next_time' => $event->nextRunDate(),
                 'without_overlapping' => $event->withoutOverlapping ? 'true' : 'false', // Do not allow the event to overlap each other.
