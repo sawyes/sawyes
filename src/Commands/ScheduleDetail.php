@@ -58,47 +58,11 @@ class ScheduleDetail extends Command
 
             $this->info('inserting data into database...');
 
-            // 主要信息
-            $this->insertScheduleInfo($scheduleData);
-
             // 详细运行时间表
             $this->insertScheduleDetail($scheduleData);
 
             $this->info('done!');
         }
-    }
-
-    /**
-     * schedule list info
-     *
-     * @param array $scheduleData
-     *
-     */
-    public function insertScheduleInfo($scheduleData)
-    {
-
-        $insertData = collect($scheduleData)->reduce(function($carry, $item){
-            $data = [
-                'full_command'        => $item['full_command'],
-                'short_command'       => $item['short_command'],
-                'expression'          => $item['expression'],
-                'without_overlapping' => $item['without_overlapping'],
-                'expires_at'          => $item['expires_at'],
-                'mutex_name'          => $item['mutex_name'],
-                'timezone'            => $item['timezone'],
-                'jobs_total'          => count($item['schedule_date']),
-                'run_date'            => $this->startDay()->toDateString(),
-                'created_at'          => Carbon::now()->toDateTimeString(),
-                'updated_at'          => Carbon::now()->toDateTimeString(),
-            ];
-            $carry[] = $data;
-
-            return $carry;
-        });
-
-        \DB::connection(config('sawyes.schedule.connection', ''))
-            ->table(config('sawyes.schedule.schedule_info_table', 'schedule'))
-            ->insert($insertData);
     }
 
     /**
@@ -111,20 +75,50 @@ class ScheduleDetail extends Command
      */
     public function insertScheduleDetail($scheduleData)
     {
-        $header = [
-            'full_command' ,
-            'short_command' ,
-            'expression' ,
-            'mutex_name' ,
-            'timezone' ,
-            'schedule_date' ,
-        ];
+        $progress = $this->output->createProgressBar(count($scheduleData));
 
-        $scheduleDetail = $this->getFormatData($header, $scheduleData);
+        foreach ($scheduleData as $rows) {
 
-        \DB::connection(config('sawyes.schedule.connection', ''))
-            ->table(config('sawyes.schedule.schedule_detail_table', 'schedule_detail'))
-            ->insert($scheduleDetail);
+            $scheduleDates = $this->scheduleRuntimeList($rows['expression']);
+
+            $scheduleDetail = [];
+            foreach ($scheduleDates as $scheduleDate) {
+                $scheduleDetail[] =  [
+                    'full_command'  => $rows['full_command'],
+                    'short_command' => $rows['short_command'],
+                    'expression'    => $rows['expression'],
+                    'mutex_name'    => $rows['mutex_name'],
+                    'timezone'      => $rows['timezone'],
+                    'schedule_date' => $scheduleDate,
+                ];
+            }
+
+            \DB::connection(config('sawyes.schedule.connection', ''))
+                ->table(config('sawyes.schedule.schedule_detail_table', 'schedule_detail'))
+                ->insert($scheduleDetail);
+
+            $scheduleInfo = [
+                'full_command'        => $rows['full_command'],
+                'short_command'       => $rows['short_command'],
+                'expression'          => $rows['expression'],
+                'without_overlapping' => $rows['without_overlapping'],
+                'expires_at'          => $rows['expires_at'],
+                'mutex_name'          => $rows['mutex_name'],
+                'timezone'            => $rows['timezone'],
+                'jobs_total'          => count($scheduleDetail),
+                'run_date'            => $this->startDay()->toDateString(),
+                'created_at'          => Carbon::now()->toDateTimeString(),
+                'updated_at'          => Carbon::now()->toDateTimeString(),
+            ];
+
+            \DB::connection(config('sawyes.schedule.connection', ''))
+                ->table(config('sawyes.schedule.schedule_info_table', 'schedule'))
+                ->insert($scheduleInfo);
+
+            $progress->advance();
+        }
+
+        $progress->finish();
     }
 
     /**
@@ -178,7 +172,7 @@ class ScheduleDetail extends Command
          $scheduleData = [];
 
          collect($events)->each(function(Event $event) use(&$scheduleData) {
-            
+
             $data = [
                 'full_command' => $event->buildCommand(),
                 'short_command' => $this->getShortCommand($event->buildCommand()),
@@ -191,41 +185,11 @@ class ScheduleDetail extends Command
                 // 'runsInMaintenanceMode' => $event->runsInMaintenanceMode(),//维护模式
             ];
 
-            $data['schedule_date'] = $this->scheduleRuntimeList($event);
             $scheduleData[] = $data;
+
         });
 
         return $scheduleData;
-    }
-
-    /**
-     * getdata by given header
-     *
-     * @param array $header
-     * @param array $data
-     * @throws \Exception
-     * @return mixed
-     *
-     */
-    private function getFormatData($header = [], $data =[])
-    {
-        if (empty($header)) {
-            throw new \Exception('Error!');
-        }
-
-        $formatData = collect($data)->reduce(function($carry, $item) use($header) {
-            foreach ($item['schedule_date'] as $scheduleDate) {
-                $row = collect($item)->only($header)->toArray();
-
-                $row['schedule_date'] = $scheduleDate;
-
-                $carry[] = $row;
-            }
-
-            return $carry;
-        });
-
-        return $formatData;
     }
 
     /**
@@ -245,17 +209,18 @@ class ScheduleDetail extends Command
     /**
      * a list about command run at which time in one day
      *
-     * @param \Illuminate\Console\Scheduling\Event $event
+     * @param string $expression
      * @return array
      */
-    private function scheduleRuntimeList($event)
+    private function scheduleRuntimeList($expression)
     {
         $flag = true;
         $nth = 0; // 周期
         $scheduleDate = [];
         while ($flag) {
 
-            $commandRunAt = Carbon::instance(CronExpression::factory($event->getExpression())
+            $commandRunAt = Carbon::instance(CronExpression::factory($expression)
+                ->setMaxIterationCount(10000)
                 ->getNextRunDate($this->startDay(), $nth, $allowCurrentDate=false));
 
             if ($commandRunAt > $this->endDay() || $nth >= 1440) {

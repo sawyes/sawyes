@@ -41,7 +41,7 @@ then you can find log file
 ```
 'providers' => [
     ...
-    Sawyes\ServiceProvider::class,
+    Sawyes\LogSqlServiceProvider::class,
     ...
     ]
 ```
@@ -50,8 +50,9 @@ then you can find log file
 
 <= 5.4
 ```
- php artisan vendor:publish --tag=Sawyes\LogSqlServiceProvider
+php artisan vendor:publish --tag='Sawyes\LogSqlServiceProvider'
 ```
+
 >5.4
 check package php artisan package:discover , then run below command choice Sawyes\LogSqlServiceProvider
 ```
@@ -66,5 +67,44 @@ now your can find log file in your storage path!
 
 
 #### 3. schedule run lists
+
+* add provider services in config/app.php 
+> laravel >=5.5 skip this step .
+
+```
+'providers' => [
+    ...
+    Sawyes\SchedulelistServiceProvider::class,
+    ...
+    ]
+```
+
+* show schedule list
+```
+php artisan schedule:detail
+```
+
+* publishes config to enable log
+> you can skip thie step, it's save schedule:detail in database using config file
+
+<= 5.4
+```
+php artisan vendor:publish --tag='Sawyes\SchedulelistServiceProvider'
+```
+
+>5.4
+check package php artisan package:discover , then run below command choice Sawyes\LogSqlServiceProvider
+```
+php artisan vendor:publish
+```
+
+you need to determine connection name, schedule list table, schedule detail list table
+
+run below command save schedule list when end of day.
+
+```
+schedule:detail --database=true --start=tomorrow
+```
+
 
 happy hacking!
