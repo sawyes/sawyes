@@ -32,7 +32,7 @@ if(! function_exists('assetWithVersion')) {
         $filePath = public_path($path);
 
         if (\File::exists($filePath)) {
-            $time = \File::lastModified($path);
+            $time = \File::lastModified($filePath);
             return asset($path) . '?v=' . $time;
         }
         return asset($path);
