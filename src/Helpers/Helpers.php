@@ -19,7 +19,7 @@ if(! function_exists('trimArray')) {
     }
 }
 
-if(! function_exists('assetWithVersion')) {
+if(! function_exists('assetVersion')) {
     /**
      * 给资源文件生成版本信息, 版本依据文件修改时间
      * 
@@ -27,7 +27,7 @@ if(! function_exists('assetWithVersion')) {
      * 
      * @return string
      */
-    function assetWithVersion($path)
+    function assetVersion($path)
     {
         $filePath = public_path($path);
 
